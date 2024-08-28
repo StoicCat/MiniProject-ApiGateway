@@ -1,7 +1,6 @@
 package com.miniProject.OlShop.model.response;
 
-import java.time.ZonedDateTime;
-import java.util.List;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +13,13 @@ import lombok.Setter;
 public class WarehouseItemResponse {
 
   private String id;
-  private Long version;
-  private ZonedDateTime updatedAt;
+  private Integer version;
+  private LocalDateTime updatedAt;
   private String updatedBy;
-  
+
   private Integer qty;
-  
-  List<SupplierItemResponse> details;
-  
-  
+
+  SupplierItemResponse details;
+
+
 }

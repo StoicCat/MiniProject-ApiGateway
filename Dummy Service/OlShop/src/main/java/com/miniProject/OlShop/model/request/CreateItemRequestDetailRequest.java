@@ -15,4 +15,6 @@ public class CreateItemRequestDetailRequest {
   
   private String supplierItemId;
   
+  private Integer qty;
+  
 }

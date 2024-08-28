@@ -1,5 +1,6 @@
 package com.miniProject.OlShop.model.request;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +10,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateWarehouseItemRequest extends CreateWarehouseItemRequest {
+public class UpdateWarehouseItemRequest  {
 
   private String id;
   
   private String version;
+  
+  private Integer qty;
+  
+  private String supplierItemId;
   
 }
