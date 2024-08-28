@@ -22,82 +22,82 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class InstockItemServiceImpl implements InStockItemService {
-	private final PrincipalService principalService;
-	private final SupplierItemService supplierItemService;
-	private final InStockItemRepository repository;
-	private static final String MSG_IN_STOCK_ITEM = "in stock item ";
+    private final PrincipalService principalService;
+    private final SupplierItemService supplierItemService;
+    private final InStockItemRepository repository;
+    private static final String MSG_IN_STOCK_ITEM = "in stock item ";
 
-	@Override
-	@Transactional
-	public void add(CreateInStockItemRequest request) {
-		InStockItem entity = mapToEntity(request);
-		repository.saveAndFlush(entity);
-	}
+    @Override
+    @Transactional
+    public void add(CreateInStockItemRequest request) {
+        InStockItem entity = mapToEntity(request);
+        repository.saveAndFlush(entity);
+    }
 
-	@Override
-	@Transactional
-	public void edit(UpdateInStockItemRequest request) {
-		InStockItem entity = getEntityById(request.getId()).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_IN_STOCK_ITEM + "is not exist"));
-		mapToEntity(entity, request);
-		repository.saveAndFlush(entity);
-	}
+    @Override
+    @Transactional
+    public void edit(UpdateInStockItemRequest request) {
+        InStockItem entity = getEntityById(request.getId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_IN_STOCK_ITEM + "is not exist"));
+        mapToEntity(entity, request);
+        repository.saveAndFlush(entity);
+    }
 
-	@Override
-	@Transactional
-	public void delete(String id) {
-		repository.deleteById(id);
-	}
+    @Override
+    @Transactional
+    public void delete(String id) {
+        repository.deleteById(id);
+    }
 
-	@Override
-	public InstockItemResponse getById(String id) {
-		InStockItem entity = getEntityById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_IN_STOCK_ITEM + "is not exist"));
+    @Override
+    public InstockItemResponse getById(String id) {
+        InStockItem entity = getEntityById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_IN_STOCK_ITEM + "is not exist"));
 
-		return mapToResponse(entity);
-	}
+        return mapToResponse(entity);
+    }
 
-	@Override
-	public List<InstockItemResponse> getAll(String inquiry) {
-		if (inquiry == null) {
-			inquiry = "";
-		}
-		List<InStockItem> entities = repository.findAllByInquiry(inquiry);
-		return entities.stream().map(this::mapToResponse).toList();
-	}
+    @Override
+    public List<InstockItemResponse> getAll(String inquiry) {
+        if (inquiry == null) {
+            inquiry = "";
+        }
+        List<InStockItem> entities = repository.findAllByInquiry(inquiry);
+        return entities.stream().map(this::mapToResponse).toList();
+    }
 
-	@Override
-	public Optional<InStockItem> getEntityById(String id) {
-		return repository.findById(id);
-	}
+    @Override
+    public Optional<InStockItem> getEntityById(String id) {
+        return repository.findById(id);
+    }
 
-	private InstockItemResponse mapToResponse(InStockItem entity) {
-		InstockItemResponse response = new InstockItemResponse();
-		response.setId(entity.getId());
-		response.setQuantity(entity.getQty());
-		response.setSupplierItemId(entity.getSupplierItem().getId());
-		response.setSupplierItemName(entity.getSupplierItem().getName());
-		response.setSupplierItemPrice(entity.getSupplierItem().getPrice());
+    private InstockItemResponse mapToResponse(InStockItem entity) {
+        InstockItemResponse response = new InstockItemResponse();
+        response.setId(entity.getId());
+        response.setQuantity(entity.getQty());
+        response.setSupplierItemId(entity.getSupplierItem().getId());
+        response.setSupplierItemName(entity.getSupplierItem().getName());
+        response.setSupplierItemPrice(entity.getSupplierItem().getPrice());
 
-		return response;
-	}
+        return response;
+    }
 
-	private InStockItem mapToEntity(CreateInStockItemRequest request) {
-		InStockItem entity = new InStockItem();
+    private InStockItem mapToEntity(CreateInStockItemRequest request) {
+        InStockItem entity = new InStockItem();
 
-		entity.setCreatedBy(principalService.getUserId());
-		entity.setQty(request.getQuantity());
-		entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
+        entity.setCreatedBy(principalService.getUserId());
+        entity.setQty(request.getQuantity());
+        entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
 
-		return entity;
-	}
+        return entity;
+    }
 
-	private InStockItem mapToEntity(InStockItem entity, UpdateInStockItemRequest request) {
-		entity.setVer(request.getVersion());
-		entity.setUpdatedBy(principalService.getUserId());
-		entity.setQty(request.getQuantity());
-		entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
+    private InStockItem mapToEntity(InStockItem entity, UpdateInStockItemRequest request) {
+        entity.setVer(request.getVersion());
+        entity.setUpdatedBy(principalService.getUserId());
+        entity.setQty(request.getQuantity());
+        entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
 
-		return entity;
-	}
+        return entity;
+    }
 }

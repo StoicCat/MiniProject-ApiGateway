@@ -1,10 +1,9 @@
 package com.miniProject.OlShop.service;
 
+import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
 import com.miniProject.OlShop.entity.WarehouseItem;
 import com.miniProject.OlShop.model.request.CreateWarehouseItemRequest;
-import com.miniProject.OlShop.model.request.PagingRequest;
 import com.miniProject.OlShop.model.request.UpdateWarehouseItemRequest;
 import com.miniProject.OlShop.model.response.WarehouseItemResponse;
 
@@ -18,7 +17,7 @@ public interface WarehouseItemService {
   
   Optional<WarehouseItem> getEntityById (String id);
   
-  Page<WarehouseItemResponse> getAll(PagingRequest pagingRequest);
+  List<WarehouseItemResponse> getAll();
   
   void delete(String id);
   

@@ -9,15 +9,15 @@ import com.miniProject.OlShop.model.request.UpdateInStockItemRequest;
 import com.miniProject.OlShop.model.response.InstockItemResponse;
 
 public interface InStockItemService {
-	void add(CreateInStockItemRequest request);
+    void add(CreateInStockItemRequest request);
 
-	void edit(UpdateInStockItemRequest request);
+    void edit(UpdateInStockItemRequest request);
 
-	void delete(String id);
+    void delete(String id);
 
-	InstockItemResponse getById(String id);
+    InstockItemResponse getById(String id);
 
-	List<InstockItemResponse> getAll(String inquiry);
+    List<InstockItemResponse> getAll(String inquiry);
 
-	Optional<InStockItem> getEntityById(String id);
+    Optional<InStockItem> getEntityById(String id);
 }

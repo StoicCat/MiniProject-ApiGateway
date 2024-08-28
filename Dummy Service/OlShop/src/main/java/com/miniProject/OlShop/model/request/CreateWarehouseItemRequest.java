@@ -13,6 +13,5 @@ import lombok.Setter;
 public class CreateWarehouseItemRequest {
 
   private Integer qty;
-  
-  List<CreateSupplierItemRequest> details;
+  private String supplierItemId;
 }

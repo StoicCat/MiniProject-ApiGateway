@@ -3,6 +3,7 @@ package com.miniProject.OlShop.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,13 +24,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserRepository userRepository;
-	
+
 	private final JwtService jwtService;
-	
+
 	private final PasswordEncoder passowordEncoder;
-	
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> claim = new HashMap<>();
 		claim.put("id", user.getId());
 		final var token = jwtService.generateJwt(claim);
-		
 
 		response.setId(user.getId().toString());
 		response.setFullName(user.getFullName());
@@ -67,20 +66,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public CreateUserResponse add(CreateUserRequest request) {
-		
+
 		final var user = new User();
-		
+
 		final var email = request.getEmail();
 		final var fullName = request.getFullName();
 		final var password = request.getPassword();
 		final var phone = request.getPhone();
 		final var role = request.getRole();
 		final var address = request.getAddress();
-		
+
 		final var encodedPassword = passowordEncoder.encode(password);
-		
+
 		final var createdBy = "system";
-		
+
 		user.setEmail(email);
 		user.setFullName(fullName);
 		user.setPassword(encodedPassword);
@@ -88,13 +87,18 @@ public class UserServiceImpl implements UserService {
 		user.setRole(role);
 		user.setAddress(address);
 		user.setCreatedBy(createdBy);
-		
+
 		userRepository.save(user);
-		
+
 		final var response = new CreateUserResponse();
 		response.setMessage("User " + fullName + " berhasil terbuat");
-		
+
 		return response;
+	}
+
+	@Override
+	public Optional<User> getEntityById(String id) {
+		return userRepository.findById(id);
 	}
 
 }
