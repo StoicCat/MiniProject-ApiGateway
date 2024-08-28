@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.miniProject.OlShop.model.request.CreateUserRequest;
 import com.miniProject.OlShop.model.request.LoginRequest;
+import com.miniProject.OlShop.model.response.CreateUserResponse;
 import com.miniProject.OlShop.model.response.LoginResponse;
 import com.miniProject.OlShop.service.UserService;
 
@@ -30,6 +32,12 @@ public class UserController {
 		authenticationManager.authenticate(auth);
 		final var response = userService.login(request);
 		return new ResponseEntity<LoginResponse>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("add")
+	public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request){
+		final var response = userService.add(request);
+		return new ResponseEntity<CreateUserResponse>(response, HttpStatus.CREATED);
 	}
 
 }
