@@ -27,40 +27,55 @@ public class InstockItemServiceImpl implements InStockItemService {
 	@Override
 	@Transactional
 	public void add(CreateInStockItemRequest request) {
-		
+		InStockItem entity = new InStockItem();
 	}
 
 	@Override
 	@Transactional
 	public void edit(UpdateInStockItemRequest request) {
-		
+		InStockItem entity = new InStockItem();
 	}
 
 	@Override
 	@Transactional
 	public void delete(String id) {
-		
+		InStockItem entity = new InStockItem();
 	}
 
 	@Override
 	public InstockItemResponse getById(String id) {
-		return null;
+		InStockItem entity = getEntityById(id).orElseThrow(() ->
+				new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_IN_STOCK_ITEM+"is not exist"));
+		
+		return mapToResponse(entity);
 	}
 
 	@Override
-	public List<PurchaseTransactionResponse> getAll() {
-		
-		return null;
+	public List<InstockItemResponse> getAll() {
+		List<InStockItem> entities = repository.findAll();
+		return entities.stream().map(this::mapToResponse).toList();
 	}
 
 	@Override
 	public Optional<InStockItem> getEntityById(String id) {
 		return repository.findById(id);
 	}
-
+	
 	private InstockItemResponse mapToResponse(InStockItem entity) {
 		InstockItemResponse response = new InstockItemResponse();
+		response.setId(entity.getId());
+		response.setQuantity(entity.getQty());
+		response.setSupplierItemId(entity.getSupplierItem().getId());
+		response.setSupplierItemName(entity.getSupplierItem().getName());
+		response.setSupplierItemPrice(entity.getSupplierItem().getPrice());
 		
 		return response;
+	}
+	
+	private InStockItem mapToEntity(CreateInStockItemRequest request) {
+		InStockItem entity = new InStockItem();
+		
+		
+		return entity;
 	}
 }
