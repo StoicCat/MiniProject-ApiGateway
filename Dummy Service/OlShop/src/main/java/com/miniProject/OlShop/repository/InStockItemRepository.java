@@ -2,6 +2,8 @@ package com.miniProject.OlShop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InStockItemRepository extends JpaRepository<InStockItemRepository, String> {
+import com.miniProject.OlShop.entity.InStockItem;
+
+public interface InStockItemRepository extends JpaRepository<InStockItem, String> {
 
 }
