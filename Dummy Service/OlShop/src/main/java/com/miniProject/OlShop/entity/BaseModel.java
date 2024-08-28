@@ -31,7 +31,7 @@ public class BaseModel {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 	
-	@Column(name = "version_", nullable = false)
+	@Column(name = "version", nullable = false)
 	@Version
 	private Integer ver;
 
