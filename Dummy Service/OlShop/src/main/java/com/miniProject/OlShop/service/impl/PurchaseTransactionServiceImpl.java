@@ -1,6 +1,7 @@
 package com.miniProject.OlShop.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.miniProject.OlShop.entity.PurchaseTransaction;
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionRequest;
@@ -43,7 +44,7 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
 	}
 
 	@Override
-	public PurchaseTransaction getEntityById(String id) {
+	public Optional<PurchaseTransaction> getEntityById(String id) {
 		
 		return null;
 	}

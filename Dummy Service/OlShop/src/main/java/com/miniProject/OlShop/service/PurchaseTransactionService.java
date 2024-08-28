@@ -1,6 +1,7 @@
 package com.miniProject.OlShop.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.miniProject.OlShop.entity.PurchaseTransaction;
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionRequest;
@@ -13,5 +14,5 @@ public interface PurchaseTransactionService {
 	void delete(String id);
 	PurchaseTransactionResponse getById(String id);
 	List<PurchaseTransactionResponse> getAll();
-	PurchaseTransaction getEntityById(String id);
+	Optional<PurchaseTransaction> getEntityById(String id);
 }

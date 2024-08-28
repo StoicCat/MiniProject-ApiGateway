@@ -17,7 +17,7 @@ public interface InStockItemService {
 
 	InstockItemResponse getById(String id);
 
-	List<InstockItemResponse> getAll();
+	List<InstockItemResponse> getAll(String inquiry);
 
 	Optional<InStockItem> getEntityById(String id);
 }
