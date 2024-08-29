@@ -2,6 +2,7 @@ package com.miniProject.OlShop.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import com.miniProject.OlShop.entity.ItemRequestDetail;
 import com.miniProject.OlShop.model.request.CreateItemRequestDetailRequest;
 import com.miniProject.OlShop.model.request.UpdateItemRequestDetailRequest;
@@ -20,7 +21,9 @@ public interface ItemRequestDetailService {
 
   List<ItemRequestDetailResponse> getAll();
 
+  List<ItemRequestDetail> getAllEntitygetByItemRequestId(String itemRequestId);
+  
+  List<ItemRequestDetailResponse> getAllByItemRequestId(String itemRequestId);
+  
   void delete(String id);
-  
-  
 }

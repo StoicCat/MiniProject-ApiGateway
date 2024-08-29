@@ -1,6 +1,5 @@
 package com.miniProject.OlShop.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 		getEntityById(request.getId()).ifPresentOrElse(entity -> {
 			entity.setAcceptanceStatus(request.getAcceptanceStatus());
 			entity.setUpdatedBy(principalService.getUserId());
-			entity.setUpdatedAt(LocalDateTime.now());
 			repository.saveAndFlush(entity);
 		}, () -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id Tidak Ditemukan");
