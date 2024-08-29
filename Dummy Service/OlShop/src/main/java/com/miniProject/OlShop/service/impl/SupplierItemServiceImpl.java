@@ -35,6 +35,7 @@ public class SupplierItemServiceImpl implements SupplierItemService {
 		entity.setName(request.getName());
 		entity.setPrice(request.getPrice());
 		userService.getEntityById(request.getUserId()).ifPresent(entity::setUser);
+		entity.setCreatedBy(principalService.getUserId());
 		repository.saveAndFlush(entity);
 	}
 

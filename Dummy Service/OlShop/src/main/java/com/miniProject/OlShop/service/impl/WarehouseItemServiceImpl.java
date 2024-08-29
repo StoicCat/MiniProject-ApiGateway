@@ -39,6 +39,7 @@ public class WarehouseItemServiceImpl implements WarehouseItemService {
     entity.setQty(request.getQty());
     supplierItemService.getEntityById(request.getSupplierItemId()).ifPresent(
         entity::setSupplierItem);
+    entity.setCreatedBy(principalService.getUserId());
     repository.saveAndFlush(entity);
   
   }
