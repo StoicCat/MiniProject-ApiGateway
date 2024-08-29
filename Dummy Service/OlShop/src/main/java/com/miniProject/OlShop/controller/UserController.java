@@ -26,7 +26,7 @@ public class UserController {
 	private final UserService userService;
 	private final AuthenticationManager authenticationManager;
 	
-	@PostMapping("login")
+	@PostMapping("login-user")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 		final Authentication auth = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 		authenticationManager.authenticate(auth);
@@ -34,7 +34,7 @@ public class UserController {
 		return new ResponseEntity<LoginResponse>(response, HttpStatus.OK);
 	}
 	
-	@PostMapping("add")
+	@PostMapping("add-user")
 	public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request){
 		final var response = userService.add(request);
 		return new ResponseEntity<CreateUserResponse>(response, HttpStatus.CREATED);
