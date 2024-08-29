@@ -26,7 +26,6 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
 
 	private final PrincipalService principalService;
 	private final PurchaseTransactionRepository repository;
-	private final CodeGenerationHelper codeGenerator;
 	private static final String MSG_PURCHASE_TRANSACTION = "purchase transaction";
 
 	@Override
@@ -76,7 +75,7 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
 		PurchaseTransaction entity = new PurchaseTransaction();
 
 		entity.setCreatedBy(principalService.getUserId());
-		entity.setTransactionCode(codeGenerator.generateCode());
+		entity.setTransactionCode(CodeGenerationHelper.generateCode());
 		entity.setTransactionDate(LocalDateTime.now());
 
 		return entity;
