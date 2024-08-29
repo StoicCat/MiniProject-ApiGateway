@@ -11,6 +11,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("purchase-transaction-detail")
 @RequiredArgsConstructor
-public class PurchaseTransactionDetail {
+public class PurchaseTransactionDetailController {
 
 }
