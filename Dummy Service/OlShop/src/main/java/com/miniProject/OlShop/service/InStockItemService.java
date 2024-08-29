@@ -16,8 +16,8 @@ public interface InStockItemService {
     void delete(String id);
 
     InstockItemResponse getById(String id);
-
-    List<InstockItemResponse> getAll(String inquiry);
+    
+    List<InstockItemResponse> getAll();
 
     Optional<InStockItem> getEntityById(String id);
 }

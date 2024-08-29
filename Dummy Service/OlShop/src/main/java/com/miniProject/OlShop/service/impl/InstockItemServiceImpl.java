@@ -58,11 +58,8 @@ public class InstockItemServiceImpl implements InStockItemService {
     }
 
     @Override
-    public List<InstockItemResponse> getAll(String inquiry) {
-        if (inquiry == null) {
-            inquiry = "";
-        }
-        List<InStockItem> entities = repository.findAllByInquiry(inquiry);
+    public List<InstockItemResponse> getAll() {
+        List<InStockItem> entities = repository.findAll();
         return entities.stream().map(this::mapToResponse).toList();
     }
 
