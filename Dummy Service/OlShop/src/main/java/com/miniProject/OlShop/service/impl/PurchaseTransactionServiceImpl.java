@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.miniProject.OlShop.entity.PurchaseTransaction;
+import com.miniProject.OlShop.entity.User;
 import com.miniProject.OlShop.helper.CodeGenerationHelper;
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionRequest;
 import com.miniProject.OlShop.model.request.UpdatePurchaseTransactionRequest;
@@ -16,6 +17,7 @@ import com.miniProject.OlShop.model.response.PurchaseTransactionResponse;
 import com.miniProject.OlShop.repository.PurchaseTransactionRepository;
 import com.miniProject.OlShop.service.PrincipalService;
 import com.miniProject.OlShop.service.PurchaseTransactionService;
+import com.miniProject.OlShop.service.UserService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class PurchaseTransactionServiceImpl implements PurchaseTransactionService {
 
 	private final PrincipalService principalService;
+	private final UserService userService;
 	private final PurchaseTransactionRepository repository;
 	private static final String MSG_PURCHASE_TRANSACTION = "purchase transaction";
 
@@ -73,8 +76,10 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
 
 	private PurchaseTransaction mapToEntity(CreatePurchaseTransactionRequest request) {
 		PurchaseTransaction entity = new PurchaseTransaction();
+		User user = userService.getEntityById(request.getUserId()).orElse(null);
 
 		entity.setCreatedBy(principalService.getUserId());
+		entity.setUser(user);
 		entity.setTransactionCode(CodeGenerationHelper.generateCode());
 		entity.setTransactionDate(LocalDateTime.now());
 
