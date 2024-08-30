@@ -11,46 +11,46 @@ import com.miniProject.OlShop.model.request.UpdateItemRequestRequest;
 import com.miniProject.OlShop.model.response.ItemRequestResponse;
 import com.miniProject.OlShop.service.ItemRequestService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("item-request")
 @RequiredArgsConstructor
-@Api(tags = "Item Request Management")
+@Tag(name = "Item Request Management", description = "APIs for managing item requests")
 public class ItemRequestController {
-	private final ItemRequestService itemRequestService;
-	
-	@PutMapping("add-item-request")
-	@ApiOperation(value = "Add a new item request")
+    private final ItemRequestService itemRequestService;
+
+    @PutMapping("add-item-request")
+    @Operation(summary = "Add a new item request")
     public ResponseEntity<String> add(@RequestBody CreateItemRequestRequest request) {
-		itemRequestService.add(request);
+        itemRequestService.add(request);
         return new ResponseEntity<>("Add Success", HttpStatus.OK);
     }
 
-	@PutMapping("edit-item-request")
-	@ApiOperation(value = "Edit an existing item request")
+    @PutMapping("edit-item-request")
+    @Operation(summary = "Edit an existing item request")
     public ResponseEntity<String> edit(@RequestBody UpdateItemRequestRequest request) {
-		itemRequestService.edit(request);
+        itemRequestService.edit(request);
         return new ResponseEntity<>("Edit Success", HttpStatus.OK);
     }
-    
+
     @PostMapping("delete-item-request-by-id")
-    @ApiOperation(value = "Delete an item request by ID")
+    @Operation(summary = "Delete an item request by ID")
     public ResponseEntity<String> delete(@RequestParam String id) {
-    	itemRequestService.delete(id);
+        itemRequestService.delete(id);
         return new ResponseEntity<>("Delete Success", HttpStatus.OK);
     }
-	
+
     @GetMapping("get-all-item-requests")
-    @ApiOperation(value = "Retrieve all item requests")
+    @Operation(summary = "Retrieve all item requests")
     public ResponseEntity<List<ItemRequestResponse>> getAll() {
         return new ResponseEntity<>(itemRequestService.getAll(), HttpStatus.OK);
     }
-    
+
     @GetMapping("get-item-request-by-id")
-    @ApiOperation(value = "Retrieve an item request by ID")
+    @Operation(summary = "Retrieve an item request by ID")
     public ResponseEntity<ItemRequestResponse> get(@RequestParam String id) {
         return new ResponseEntity<>(itemRequestService.getById(id), HttpStatus.OK);
     }

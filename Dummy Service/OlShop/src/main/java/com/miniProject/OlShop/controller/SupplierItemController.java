@@ -11,49 +11,49 @@ import com.miniProject.OlShop.model.request.UpdateSupplierItemRequest;
 import com.miniProject.OlShop.model.response.SupplierItemResponse;
 import com.miniProject.OlShop.service.SupplierItemService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("supplier-item")
 @RequiredArgsConstructor
-@Api(tags = "Supplier Item Management")
+@Tag(name = "Supplier Item Management", description = "APIs for managing supplier items")
 public class SupplierItemController {
 	
 	private final SupplierItemService service;
 	
 	@PostMapping("create-new-supplier-item")
-	@ApiOperation(value = "Create a new supplier item")
-	public String createNewSupplierItem(@RequestBody CreateSupplierItemRequest request) {
+	@Operation(summary = "Create a new supplier item")
+	public ResponseEntity<String> createNewSupplierItem(@RequestBody CreateSupplierItemRequest request) {
 		service.add(request);
-		return "Supplier item added";
+		return new ResponseEntity<>("Supplier item added", HttpStatus.CREATED);
 	}
 	
-	@PostMapping("edit-supplier-item")
-	@ApiOperation(value = "Edit an existing supplier item")
-	public String editSupplierItem(@RequestBody UpdateSupplierItemRequest request) {
+	@PutMapping("edit-supplier-item")
+	@Operation(summary = "Edit an existing supplier item")
+	public ResponseEntity<String> editSupplierItem(@RequestBody UpdateSupplierItemRequest request) {
 		service.edit(request);
-		return "Supplier item edited";
+		return new ResponseEntity<>("Supplier item edited", HttpStatus.OK);
 	}
 	
-	@PatchMapping("delete-supplier-item/{id}")
-	@ApiOperation(value = "Delete a supplier item by ID")
-	public String deleteSupplierItem(@PathVariable String id) {
+	@DeleteMapping("delete-supplier-item/{id}")
+	@Operation(summary = "Delete a supplier item by ID")
+	public ResponseEntity<String> deleteSupplierItem(@PathVariable String id) {
 		service.delete(id);
-		return "Supplier item deleted";
+		return new ResponseEntity<>("Supplier item deleted", HttpStatus.OK);
 	}
 	
 	@GetMapping("get-supplier-item-by-id/{id}")
-	@ApiOperation(value = "Get a supplier item by ID")
+	@Operation(summary = "Get a supplier item by ID")
 	public ResponseEntity<SupplierItemResponse> getSupplierItemById(@PathVariable String id){
 		final var response = service.getById(id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("get-all-supplier-item")
-	@ApiOperation(value = "Get all supplier items")
-	public ResponseEntity<List<SupplierItemResponse>> getAllSupplierItem(){
+	@Operation(summary = "Get all supplier items")
+	public ResponseEntity<List<SupplierItemResponse>> getAllSupplierItems(){
 		final var response = service.getAll();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
