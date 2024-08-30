@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.miniproject.apigateway.constant.Environment;
 import com.miniproject.apigateway.model.request.CreateUserRequest;
 import com.miniproject.apigateway.model.request.CreateUserRequestGateway;
 import com.miniproject.apigateway.model.response.ApiResponse;
@@ -29,7 +30,6 @@ public class UserController {
 
     private final HealthCheckService healthCheckService;
     private final WebClient.Builder webClientBuilder;
-    private static final String datasourceServiceUrl = "http://localhost:8082/";
 
     @PostMapping("/register")
     public Mono<LoginResponseGateway> registerLogin(@RequestBody CreateUserRequestGateway request) {
@@ -44,11 +44,10 @@ public class UserController {
                         requestAddUser.setPhone(request.getPhone());
                         requestAddUser.setRole(request.getRole());
                         requestAddUser.setFullName(request.getFirstName() + " " + request.getLastName());
-
                         // Kirim permintaan untuk menambahkan pengguna
                         return webClientBuilder.build()
                                 .post()
-                                .uri(datasourceServiceUrl + "users/add-user")
+                                .uri(Environment.SERVICE_URL  + "users/add-user")
                                 .bodyValue(requestAddUser)
                                 .retrieve()
                                 .bodyToMono(String.class) // Mendapatkan respons dari penambahan pengguna
@@ -56,7 +55,7 @@ public class UserController {
                                     // Jika menambahkan pengguna berhasil, kirim permintaan login
                                     return webClientBuilder.build()
                                             .post()
-                                            .uri(datasourceServiceUrl + "users/login-user")
+                                            .uri(Environment.SERVICE_URL  + "users/login-user")
                                             .bodyValue(request)
                                             .retrieve()
                                             .bodyToMono(LoginResponse.class) // Mendapatkan respons login
@@ -71,7 +70,6 @@ public class UserController {
                                                 customResponse.setPhone(loginResponse.getPhone());
                                                 customResponse.setAddress(loginResponse.getAddress());
                                                 customResponse.setRole(loginResponse.getRole());
-
                                                 return Mono.just(customResponse); // Kembalikan respons yang telah dikonversi
                                             });
                                 })
@@ -93,13 +91,13 @@ public class UserController {
                     if (isAvailable) {
                         // Menyiapkan request login dengan username dan password
                         Map<String, String> loginRequest = new HashMap<>();
-                        loginRequest.put("email", request.get("username"));
+                        loginRequest.put("email", request.get("email"));
                         loginRequest.put("password", request.get("password"));
 
                         // Kirim permintaan login dan tunggu respons
                         return webClientBuilder.build()
                                 .post()
-                                .uri(datasourceServiceUrl + "users/login-user")
+                                .uri(Environment.SERVICE_URL + "users/login-user")
                                 .bodyValue(loginRequest)
                                 .retrieve()
                                 .bodyToMono(LoginResponse.class)
@@ -193,5 +191,4 @@ public class UserController {
                     return Mono.just(apiResponse);
                 });
     }
-
 }
