@@ -5,15 +5,18 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class SwaggerConfig {
+import org.springframework.context.annotation.Configuration;
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Mini Project API")
-                        .version("1.0")
-                        .description("API documentation for the Mini Project OlShop application"));
-    }
+@Configuration
+//@EnableSwagger2
+public class SwaggerConfig {
+	
+//	@Bean
+//    public Docket api() {
+//        return new Docket(DocumentationType.SWAGGER_2)
+//                .select()
+//                .apis(RequestHandlerSelectors.basePackage("com.miniProject.OlShop.controller"))
+//                .paths(PathSelectors.any())
+//                .build();
+//    }
 }
