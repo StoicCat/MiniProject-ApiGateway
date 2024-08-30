@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class InStockItemController {
     private final InStockItemService inStockItemService;
 
-    @PutMapping("add-item")
+    @PostMapping("add-item")
     @Operation(summary = "Add a new item to stock")
     public ResponseEntity<String> addItem(@RequestBody CreateInStockItemRequest request) {
         inStockItemService.add(request);
@@ -42,7 +43,7 @@ public class InStockItemController {
         return new ResponseEntity<>("Edit Success", HttpStatus.OK);
     }
 
-    @PostMapping("delete-item-by-id")
+    @DeleteMapping("delete-item-by-id")
     @Operation(summary = "Delete an item by its ID")
     public ResponseEntity<String> deleteItem(@RequestParam String id) {
         inStockItemService.delete(id);

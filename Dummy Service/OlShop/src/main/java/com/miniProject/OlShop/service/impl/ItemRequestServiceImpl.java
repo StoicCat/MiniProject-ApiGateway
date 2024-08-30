@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.miniProject.OlShop.constant.AcceptanceStatus;
 import com.miniProject.OlShop.entity.ItemRequest;
 import com.miniProject.OlShop.model.request.CreateItemRequestRequest;
 import com.miniProject.OlShop.model.request.UpdateItemRequestRequest;
@@ -34,22 +35,35 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 	@Override
 	public void add(CreateItemRequestRequest request) {
 		ItemRequest entity = new ItemRequest();
-		entity.setAcceptanceStatus(request.getAcceptanceStatus());
+		entity.setAcceptanceStatus(AcceptanceStatus.PND.getCode());
 		userService.getEntityById(request.getUserSupplierId()).ifPresent(entity::setUserSupplier);
 		repository.saveAndFlush(entity);
 	}
 
 	@Transactional
 	@Override
-	public void edit(UpdateItemRequestRequest request) {
+	public void acc(UpdateItemRequestRequest request) {
 		getEntityById(request.getId()).ifPresentOrElse(entity -> {
-			entity.setAcceptanceStatus(request.getAcceptanceStatus());
+			entity.setAcceptanceStatus(AcceptanceStatus.ACC.getCode());
 			entity.setUpdatedBy(principalService.getUserId());
 			repository.saveAndFlush(entity);
 		}, () -> {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id Tidak Ditemukan");
 		});
 
+	}
+	
+	@Transactional
+	@Override
+	public void dcl(UpdateItemRequestRequest request) {
+		getEntityById(request.getId()).ifPresentOrElse(entity -> {
+			entity.setAcceptanceStatus(AcceptanceStatus.DCL.getCode());
+			entity.setUpdatedBy(principalService.getUserId());
+			repository.saveAndFlush(entity);
+		}, () -> {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id Tidak Ditemukan");
+		});
+		
 	}
 
 	@Override

@@ -81,9 +81,13 @@ public class InstockItemServiceImpl implements InStockItemService {
 
     private InStockItem mapToEntity(CreateInStockItemRequest request) {
         InStockItem entity = new InStockItem();
-
+        
         entity.setCreatedBy(principalService.getUserId());
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
+        System.out.println(principalService.getUserId());
         entity.setQty(request.getQuantity());
+        System.out.println(request.getQuantity());
+        System.out.println(request.getSupplierItemId());
         entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
 
         return entity;

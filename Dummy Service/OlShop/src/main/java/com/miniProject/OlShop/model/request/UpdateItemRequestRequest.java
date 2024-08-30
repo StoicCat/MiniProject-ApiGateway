@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateItemRequestRequest extends CreateItemRequestRequest {
+	
   private String id;
   
   private String version;

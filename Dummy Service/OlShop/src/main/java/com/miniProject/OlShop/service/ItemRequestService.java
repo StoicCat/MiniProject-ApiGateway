@@ -11,7 +11,9 @@ public interface ItemRequestService {
   
   void add(CreateItemRequestRequest request);
 
-  void edit(UpdateItemRequestRequest request);
+  void acc(UpdateItemRequestRequest request);
+  
+  void dcl(UpdateItemRequestRequest request);
 
   ItemRequestResponse getById(String id);
 
