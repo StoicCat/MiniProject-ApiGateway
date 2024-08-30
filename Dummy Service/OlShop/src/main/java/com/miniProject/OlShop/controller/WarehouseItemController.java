@@ -35,6 +35,13 @@ public class WarehouseItemController {
 		return new ResponseEntity<>("Item has been created", HttpStatus.CREATED);
 	}
 	
+//	@PostMapping("get-all-warehouse-items")
+//	@Operation(summary = "Get all warehouse item")
+//	public ResponseEntity<String> getAllWarehouseItems() {
+//		service.add(request);
+//		return new ResponseEntity<>("Item has been created", HttpStatus.CREATED);
+//	}
+	
 	@GetMapping("get-warehouse-item-by-id/{id}")
 	@Operation(summary = "Get a warehouse item by ID")
 	public ResponseEntity<WarehouseItemResponse> getWarehouseItemById(@PathVariable String id){
