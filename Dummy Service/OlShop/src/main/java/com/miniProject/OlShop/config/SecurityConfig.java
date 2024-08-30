@@ -44,6 +44,8 @@ public class SecurityConfig {
 		matchers.add(new AntPathRequestMatcher("/users/*", HttpMethod.POST.name()));
 		matchers.add(new AntPathRequestMatcher("/users/add", HttpMethod.POST.name()));
 		matchers.add(new AntPathRequestMatcher("/*", HttpMethod.GET.name()));
+		matchers.add(new AntPathRequestMatcher("/actuator/health"));
+
 		return matchers; 
 	}
 
