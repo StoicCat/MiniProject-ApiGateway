@@ -20,8 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthorizationFilter extends OncePerRequestFilter{
-	
+public class AuthorizationFilter extends OncePerRequestFilter {
+
 	@Autowired
 	private JwtService jwtService;
 
@@ -31,6 +31,12 @@ public class AuthorizationFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+
+		// Bypass JWT authentication for Swagger endpoints
+		if (request.getRequestURI().startsWith("/swagger-ui/") || request.getRequestURI().startsWith("/v3/api-docs/")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
 		final String header = request.getHeader("Authorization");
 		if (header != null) {
@@ -43,11 +49,11 @@ public class AuthorizationFilter extends OncePerRequestFilter{
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.setStatus(401);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
 				return;
 			}
 		} else {
-			response.setStatus(401);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
 			return;
 		}
 
@@ -56,7 +62,10 @@ public class AuthorizationFilter extends OncePerRequestFilter{
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		return matchers.stream().anyMatch(m -> m.matches(request));
+		// Exclude Swagger endpoints from JWT filtering
+//		return matchers.stream().anyMatch(m -> m.matches(request)) || request.getRequestURI().startsWith("/swagger-ui/")
+//				|| request.getRequestURI().startsWith("/v3/api-docs/");
+		return true;
 	}
 
 }
