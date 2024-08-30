@@ -12,6 +12,5 @@ import lombok.Setter;
 public class CreateItemRequestRequest {
 
   private String userSupplierId;
-  private String acceptanceStatus;
   
 }

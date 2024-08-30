@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,21 +29,28 @@ import lombok.RequiredArgsConstructor;
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
 
-    @PutMapping("add-item-request")
+    @PostMapping("add-item-request")
     @Operation(summary = "Add a new item request")
     public ResponseEntity<String> add(@RequestBody CreateItemRequestRequest request) {
         itemRequestService.add(request);
         return new ResponseEntity<>("Add Success", HttpStatus.OK);
     }
 
-    @PutMapping("edit-item-request")
-    @Operation(summary = "Edit an existing item request")
-    public ResponseEntity<String> edit(@RequestBody UpdateItemRequestRequest request) {
-        itemRequestService.edit(request);
-        return new ResponseEntity<>("Edit Success", HttpStatus.OK);
+    @PutMapping("acc-item-request")
+    @Operation(summary = "acc an existing item request")
+    public ResponseEntity<String> acc(@RequestBody UpdateItemRequestRequest request) {
+        itemRequestService.acc(request);
+        return new ResponseEntity<>("acc Success", HttpStatus.OK);
+    }
+    
+    @PutMapping("dcl-item-request")
+    @Operation(summary = "decline an existing item request")
+    public ResponseEntity<String> dcl(@RequestBody UpdateItemRequestRequest request) {
+    	itemRequestService.dcl(request);
+    	return new ResponseEntity<>("decline Success", HttpStatus.OK);
     }
 
-    @PostMapping("delete-item-request-by-id")
+    @DeleteMapping("delete-item-request-by-id")
     @Operation(summary = "Delete an item request by ID")
     public ResponseEntity<String> delete(@RequestParam String id) {
         itemRequestService.delete(id);

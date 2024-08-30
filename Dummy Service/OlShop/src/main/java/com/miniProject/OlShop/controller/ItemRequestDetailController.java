@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemRequestDetailController {
     private final ItemRequestDetailService itemRequestDetailService;
 
-    @PutMapping("add-purchase-transaction-detail")
+    @PostMapping("add-purchase-transaction-detail")
     @Operation(summary = "Add a new item request detail")
     public ResponseEntity<String> add(@RequestBody CreateItemRequestDetailRequest request) {
         itemRequestDetailService.add(request);
