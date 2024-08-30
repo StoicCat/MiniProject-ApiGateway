@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class PurchaseTransactionDetailController {
 	private final PurchaseTransactionDetailService purchaseTransactionDetailService;
 	
-	@PutMapping("add-purchase-transaction-detail")
+	@PostMapping("add-purchase-transaction-detail")
 	@Operation(summary = "Add a new purchase transaction detail")
     public ResponseEntity<String> add(@RequestBody CreatePurchaseTransactionDetailRequest request) {
 		purchaseTransactionDetailService.add(request);
