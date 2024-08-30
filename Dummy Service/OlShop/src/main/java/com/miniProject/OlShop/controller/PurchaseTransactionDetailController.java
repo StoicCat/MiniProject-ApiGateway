@@ -4,32 +4,32 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionDetailRequest;
 import com.miniProject.OlShop.model.response.PurchaseTransactionDetailResponse;
 import com.miniProject.OlShop.service.PurchaseTransactionDetailService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("purchase-transaction-detail")
 @RequiredArgsConstructor
+@Api(tags = "Purchase Transaction Detail Management")
 public class PurchaseTransactionDetailController {
 	private final PurchaseTransactionDetailService purchaseTransactionDetailService;
 	
 	@PutMapping("add-purchase-transaction-detail")
-    public ResponseEntity<String> add(@RequestParam CreatePurchaseTransactionDetailRequest request) {
+	@ApiOperation(value = "Add a new purchase transaction detail")
+    public ResponseEntity<String> add(@RequestBody CreatePurchaseTransactionDetailRequest request) {
 		purchaseTransactionDetailService.add(request);
-        return new ResponseEntity<>("Add Success ", HttpStatus.OK);
+        return new ResponseEntity<>("Add Success", HttpStatus.OK);
     }
 
-	@DeleteMapping("get-all-purchase-transaction-details-by-purchase-transaction-id/{purchaseTransactionId}")
+	@GetMapping("get-all-purchase-transaction-details-by-purchase-transaction-id/{purchaseTransactionId}")
+	@ApiOperation(value = "Get all purchase transaction details by transaction ID")
     public ResponseEntity<List<PurchaseTransactionDetailResponse>> get(@PathVariable String purchaseTransactionId) {
         return new ResponseEntity<>(purchaseTransactionDetailService.getAllByPurchaseTransactionId(purchaseTransactionId), HttpStatus.OK);
     }
