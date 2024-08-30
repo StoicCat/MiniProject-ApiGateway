@@ -9,44 +9,44 @@ import com.miniProject.OlShop.model.request.UpdateWarehouseItemRequest;
 import com.miniProject.OlShop.model.response.WarehouseItemResponse;
 import com.miniProject.OlShop.service.WarehouseItemService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("warehouse-item")
 @RequiredArgsConstructor
-@Api(tags = "Warehouse Item Management")
+@Tag(name = "Warehouse Item Management", description = "APIs for managing warehouse items")
 public class WarehouseItemController {
 	
 	private final WarehouseItemService service;
 	
 	@PostMapping("create-new-warehouse-item")
-	@ApiOperation(value = "Create a new warehouse item")
-	public String CreateNewWarehouseItem(@RequestBody CreateWarehouseItemRequest request) {
+	@Operation(summary = "Create a new warehouse item")
+	public ResponseEntity<String> createNewWarehouseItem(@RequestBody CreateWarehouseItemRequest request) {
 		service.add(request);
-		return "Item has been created";
+		return new ResponseEntity<>("Item has been created", HttpStatus.CREATED);
 	}
 	
 	@GetMapping("get-warehouse-item-by-id/{id}")
-	@ApiOperation(value = "Get a warehouse item by ID")
+	@Operation(summary = "Get a warehouse item by ID")
 	public ResponseEntity<WarehouseItemResponse> getWarehouseItemById(@PathVariable String id){
 		final var response = service.getById(id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PatchMapping("edit-warehouse-item")
-	@ApiOperation(value = "Edit an existing warehouse item")
-	public String editWarehouseItem(@RequestBody UpdateWarehouseItemRequest request){
+	@Operation(summary = "Edit an existing warehouse item")
+	public ResponseEntity<String> editWarehouseItem(@RequestBody UpdateWarehouseItemRequest request){
 		service.edit(request);
-		return "Item successfully edited";
+		return new ResponseEntity<>("Item successfully edited", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("delete-warehouse-item/{id}")
-	@ApiOperation(value = "Delete a warehouse item by ID")
-	public String deleteWarehouseItem(@PathVariable String id) {
+	@Operation(summary = "Delete a warehouse item by ID")
+	public ResponseEntity<String> deleteWarehouseItem(@PathVariable String id) {
 		service.delete(id);
-		return "Item successfully deleted";
+		return new ResponseEntity<>("Item successfully deleted", HttpStatus.OK);
 	}
 
 }

@@ -27,17 +27,16 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthorizationFilter authorizationFilter)
-			throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http.cors(Customizer.withDefaults())
+	        .csrf(csrf -> csrf.disable())
+	        .authorizeHttpRequests(authz -> authz
+	            .anyRequest().permitAll()
+	        );
 
-		http.cors(Customizer.withDefaults());
-		http.csrf(csrf -> csrf.disable());
-		
-		http.addFilterAt(authorizationFilter, BasicAuthenticationFilter.class);
-		
-		
-		return http.build();
+	    return http.build();
 	}
+
 	
 	@Bean
 	public List<RequestMatcher> matchers() {
