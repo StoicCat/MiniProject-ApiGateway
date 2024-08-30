@@ -17,38 +17,46 @@ import com.miniProject.OlShop.model.request.UpdateInStockItemRequest;
 import com.miniProject.OlShop.model.response.InstockItemResponse;
 import com.miniProject.OlShop.service.InStockItemService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("instock-item")
 @RequiredArgsConstructor
+@Api(tags = "InStock Item Management")
 public class InStockItemController {
 	private final InStockItemService inStockItemService;
 	
 	@PutMapping("add-item")
-    public ResponseEntity<String> addItem(@RequestParam CreateInStockItemRequest request) {
+	@ApiOperation(value = "Add a new item to stock")
+    public ResponseEntity<String> addItem(@RequestBody CreateInStockItemRequest request) {
 		inStockItemService.add(request);
-        return new ResponseEntity<>("Add Success ", HttpStatus.OK);
+        return new ResponseEntity<>("Add Success", HttpStatus.OK);
     }
 
-	@GetMapping("edit-item-quantity")
+	@PutMapping("edit-item-quantity")
+	@ApiOperation(value = "Edit the quantity of an existing item")
     public ResponseEntity<String> editItem(@RequestBody UpdateInStockItemRequest request) {
     	inStockItemService.edit(request);
-        return new ResponseEntity<>("Edit Success ", HttpStatus.OK);
+        return new ResponseEntity<>("Edit Success", HttpStatus.OK);
     }
     
     @PostMapping("delete-item-by-id")
+    @ApiOperation(value = "Delete an item by its ID")
     public ResponseEntity<String> deleteItem(@RequestParam String id) {
     	inStockItemService.delete(id);
-        return new ResponseEntity<>("Delete Success ", HttpStatus.OK);
+        return new ResponseEntity<>("Delete Success", HttpStatus.OK);
     }
 	
-    @PutMapping("get-all-items")
+    @GetMapping("get-all-items")
+    @ApiOperation(value = "Retrieve all items in stock")
     public ResponseEntity<List<InstockItemResponse>> getItems() {
         return new ResponseEntity<>(inStockItemService.getAll(), HttpStatus.OK);
     }
     
-    @PutMapping("get-item-by-id")
+    @GetMapping("get-item-by-id")
+    @ApiOperation(value = "Retrieve an item by its ID")
     public ResponseEntity<InstockItemResponse> getItems(@RequestParam String id) {
         return new ResponseEntity<>(inStockItemService.getById(id), HttpStatus.OK);
     }

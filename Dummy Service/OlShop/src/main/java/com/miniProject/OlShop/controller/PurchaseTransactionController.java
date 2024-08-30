@@ -4,46 +4,42 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionRequest;
 import com.miniProject.OlShop.model.response.PurchaseTransactionResponse;
 import com.miniProject.OlShop.service.PurchaseTransactionService;
-import com.miniProject.OlShop.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("purchase-transaction")
 @RequiredArgsConstructor
+@Api(tags = "Purchase Transaction Management")
 public class PurchaseTransactionController {
 	
 	private final PurchaseTransactionService service;
-	private final AuthenticationManager authManager;
-	
-	@GetMapping("createNewPurchaseTransaction")
-	public String createUser(@RequestBody CreatePurchaseTransactionRequest request){
+
+	@PostMapping("createNewPurchaseTransaction")
+	@ApiOperation(value = "Create a new purchase transaction")
+	public String createPurchaseTransaction(@RequestBody CreatePurchaseTransactionRequest request){
 		service.add(request);
-		return "berhasil input";
+		return "Purchase transaction created successfully";
 	}
 	
 	@GetMapping("getPurchaseTransactionById/{id}")
-	public ResponseEntity<PurchaseTransactionResponse> GetPurchaseTransactionById(@PathVariable String id){
+	@ApiOperation(value = "Get a purchase transaction by ID")
+	public ResponseEntity<PurchaseTransactionResponse> getPurchaseTransactionById(@PathVariable String id){
 		final var response = service.getById(id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("getAllPurchaseTransaction")
-	public ResponseEntity<List<PurchaseTransactionResponse>> GetAllPurchaseTransaction(){
+	@ApiOperation(value = "Get all purchase transactions")
+	public ResponseEntity<List<PurchaseTransactionResponse>> getAllPurchaseTransactions(){
 		final var response = service.getAll();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
-
 }
