@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.miniproject.apigateway.constant.Environment;
+import com.miniproject.apigateway.model.request.CreateInStockItemRequest;
+import com.miniproject.apigateway.model.request.CreateSupplierItemRequest;
 import com.miniproject.apigateway.model.request.CreateUserRequest;
+import com.miniproject.apigateway.model.request.UpdateWarehouseItemRequest;
 import com.miniproject.apigateway.model.response.ApiResponse;
 import com.miniproject.apigateway.model.response.InStockItemResponse;
 import com.miniproject.apigateway.model.response.LoginResponse;
@@ -41,7 +44,7 @@ public class ItemController {
 	private final WebClient.Builder webClientBuilder;
 
 	@GetMapping("supplier-items")
-	public Mono<ResponseEntity<?>> getSupplierItems(@RequestHeader("IniBukanKunci") String authorizationHeader) {
+	public Mono<ApiResponse<?>> getSupplierItems(@RequestHeader("IniBukanKunci") String authorizationHeader) {
 		return healthCheckService.checkBackendHealth()
                 .flatMap(isAvailable -> {
                 	if (isAvailable) {
@@ -65,16 +68,15 @@ public class ItemController {
                             apiResponse.setContent(response);
                             
                             return Mono.just(apiResponse);
-        				})
-        				.map(ResponseEntity::ok);
+        				});
                     } else {
-                        return Mono.just(new ResponseEntity<>(new LoginResponseGateway(), HttpStatus.OK));
+        				return healthCheckService.getErrorMessage(SupplierItemResponse.class);
                     }
                 });
 	}
 	
 	@GetMapping("supplier-items/{id}")
-	public Mono<ResponseEntity<?>> getSupplierItem(
+	public Mono<ApiResponse<?>> getSupplierItem(
 			@RequestHeader("IniBukanKunci") String authorizationHeader,
 			@PathVariable String id) {
 		return healthCheckService.checkBackendHealth()
@@ -100,21 +102,51 @@ public class ItemController {
                             apiResponse.setContent(response);
                             
                             return Mono.just(apiResponse);
-        				})
-        				.map(ResponseEntity::ok);
+        				});
                     } else {
-                        return Mono.just(new ResponseEntity<>(new LoginResponseGateway(), HttpStatus.OK));
+        				return healthCheckService.getErrorMessage(SupplierItemResponse.class);
                     }
                 });
 	}
 	
-//	@PostMapping("supplier-items")
-//	public Mono<ResponseEntity<?>> addSupplierItems(@RequestHeader("IniBukanKunci") String authorizationHeader) {
-//		
-//	}
+	@PostMapping("supplier-items")
+	public Mono<ApiResponse<String>> addSupplierItems(
+			@RequestHeader("IniBukanKunci") String authorizationHeader,
+			@RequestBody CreateSupplierItemRequest request) {
+		return healthCheckService.checkBackendHealth()
+				.flatMap(isAvailable -> {
+					if(isAvailable) {
+						return webClientBuilder.build()
+								.post()
+								.uri(Environment.SERVICE_URL+"supplier-item/create-new-supplier-item")
+								.header("IniBukanKunci", authorizationHeader) 
+								.bodyValue(request)
+								.retrieve()
+								.bodyToMono(String.class)
+								.flatMap(response -> {
+		        					ApiResponse<String> apiResponse = new ApiResponse<>();	
+		                            ApiResponse.Header header = new ApiResponse.Header();
+		                            header.setRequestId(UUID.randomUUID().toString()); 
+		                            header.setTimestamp(LocalDateTime.now().toString()); 
+		                            apiResponse.setHeader(header);
+		                            
+		                            ApiResponse.Status status = new ApiResponse.Status();
+		                            status.setCode(HttpStatus.OK.value());
+		                            status.setDescription(HttpStatus.OK.getReasonPhrase());
+		                            apiResponse.setStatus(status);
+		                            
+		                            apiResponse.setContent(response);
+		                            
+		                            return Mono.just(apiResponse);
+								});
+					}else {
+						return healthCheckService.getErrorMessage(String.class);
+					}
+				});
+	}
 	
 	@GetMapping("in-stock-items")
-	public Mono<ResponseEntity<?>> getInStockItems(@RequestHeader("IniBukanKunci") String authorizationHeader) {
+	public Mono<ApiResponse<?>> getInStockItems(@RequestHeader("IniBukanKunci") String authorizationHeader) {
 		return healthCheckService.checkBackendHealth()
                 .flatMap(isAvailable -> {
                 	if (isAvailable) {
@@ -138,16 +170,15 @@ public class ItemController {
                             apiResponse.setContent(response);
                             
                             return Mono.just(apiResponse);
-        				})
-        				.map(ResponseEntity::ok);
+        				});
                     } else {
-                        return Mono.just(new ResponseEntity<>(new LoginResponseGateway(), HttpStatus.OK)); 
+        				return healthCheckService.getErrorMessage(InStockItemResponse.class);
                     }
                 });
 	}
 
     @GetMapping("in-stock-items/{id}")
-	public Mono<ResponseEntity<?>> getInStockItem(
+	public Mono<ApiResponse<?>> getInStockItem(
 			@RequestHeader("IniBukanKunci") String authorizationHeader,
 			@PathVariable String id) {
 		return healthCheckService.checkBackendHealth()
@@ -176,59 +207,94 @@ public class ItemController {
                             apiResponse.setContent(response);
                             
                             return Mono.just(apiResponse);
-        				})
-        				.map(ResponseEntity::ok);
+        				});
                     } else {
-                        return Mono.just(new ResponseEntity<>(new LoginResponseGateway(), HttpStatus.OK)); 
+        				return healthCheckService.getErrorMessage(InStockItemResponse.class);
                     }
                 });
 	}
-	
+    
+    @PostMapping("in-stock-items")
+    public Mono<ApiResponse<String>> addInstockItem(
+			@RequestHeader("IniBukanKunci") String authorizationHeader,
+			@RequestBody CreateInStockItemRequest request) {
+    	UpdateWarehouseItemRequest warehouseRequest = new UpdateWarehouseItemRequest();
+    	warehouseRequest.setQty(request.getQuantity());
+    	warehouseRequest.setSupplierItemId(request.getSupplierItemId());
+		return healthCheckService.checkBackendHealth()
+				.flatMap(isAvailable -> {
+					if(isAvailable) {
+						return webClientBuilder.build()
+								.patch()
+								.uri(Environment.SERVICE_URL+"warehouse-item/edit-warehouse-item")
+								.header("IniBukanKunci", authorizationHeader) 
+								.bodyValue(warehouseRequest)
+								.retrieve()
+								.bodyToMono(String.class)
+								.flatMap(response -> {
+									return webClientBuilder.build()
+											.post()
+											.uri(Environment.SERVICE_URL+"instock-item/add-item")
+											.header("IniBukanKunci", authorizationHeader) 
+											.bodyValue(request)
+											.retrieve()
+											.bodyToMono(String.class)
+											.flatMap(secondResponse -> {
+	                                            ApiResponse<String> apiResponse = new ApiResponse<>();
+	                                            ApiResponse.Header header = new ApiResponse.Header();
+	                                            header.setRequestId(UUID.randomUUID().toString());
+	                                            header.setTimestamp(LocalDateTime.now().toString());
+	                                            apiResponse.setHeader(header);
+	                                            
+	                                            ApiResponse.Status status = new ApiResponse.Status();
+	                                            status.setCode(HttpStatus.OK.value());
+	                                            status.setDescription(HttpStatus.OK.getReasonPhrase());
+	                                            apiResponse.setStatus(status);
+	                                            
+	                                            apiResponse.setContent(secondResponse);
+	                                            
+	                                            return Mono.just(apiResponse);
+											});
+								});
+					}else {
+						return healthCheckService.getErrorMessage(String.class);
+					}
+				});
+    }
+    
 //    @PutMapping("in-stock-items/restock")
-//    public ResponseEntity<?> getInStockItemById(@PathVariable String id) {
-//    	
-//    }
-//    
-//    @PostMapping("in-stock-items")
-//    public ResponseEntity<?> getInStockItemById(@PathVariable String id) {
-//    	
-//    }
-//    
-//	@GetMapping("warehouse-items")
-//	public Mono<ResponseEntity<?>> getWarehouseItem(@RequestHeader("IniBukanKunci") String authorizationHeader) {
+//    public Mono<ApiResponse<String>> restockInStockItem(
+//			@RequestHeader("IniBukanKunci") String authorizationHeader,
+//			@RequestBody CreateSupplierItemRequest request) {
 //		return healthCheckService.checkBackendHealth()
-//                .flatMap(isAvailable -> {
-//                	if (isAvailable) {
-//                        return webClientBuilder.build().get().uri(Environment.SERVICE_URL+"instock-item/get-all-items")
-//                				.headers(headers -> headers.setBearerAuth(
-//        						authorizationHeader))
-//        				.retrieve()
-//        				.bodyToMono(new ParameterizedTypeReference<List<InStockItemResponse>>() {})
-//        				.flatMap(response -> {
-//        					ApiResponse<List<InStockItemResponse>> apiResponse = new ApiResponse<>();	
-//                            ApiResponse.Header header = new ApiResponse.Header();
-//                            header.setRequestId(UUID.randomUUID().toString()); 
-//                            header.setTimestamp(LocalDateTime.now().toString()); 
-//                            apiResponse.setHeader(header);
-//                            
-//                            ApiResponse.Status status = new ApiResponse.Status();
-//                            status.setCode(HttpStatus.OK.value());
-//                            status.setDescription(HttpStatus.OK.getReasonPhrase());
-//                            apiResponse.setStatus(status);
-//                            
-//                            apiResponse.setContent(response);
-//                            
-//                            return Mono.just(apiResponse);
-//        				})
-//        				.map(ResponseEntity::ok);
-//                    } else {
-//                        return Mono.just(new ResponseEntity<>(new LoginResponseGateway(), HttpStatus.OK)); 
-//                    }
-//                });
-//	}
-//    
-//    @GetMapping("warehouse-items/{id}")
-//    public ResponseEntity<?> getInStockItemById(@PathVariable String id) {
-//    	
+//				.flatMap(isAvailable -> {
+//					if(isAvailable) {
+//						return webClientBuilder.build()
+//								.post()
+//								.uri(Environment.SERVICE_URL+"supplier-item/create-new-supplier-item")
+//								.header("IniBukanKunci", authorizationHeader) 
+//								.bodyValue(request)
+//								.retrieve()
+//								.bodyToMono(String.class)
+//								.flatMap(response -> {
+//		        					ApiResponse<String> apiResponse = new ApiResponse<>();	
+//		                            ApiResponse.Header header = new ApiResponse.Header();
+//		                            header.setRequestId(UUID.randomUUID().toString()); 
+//		                            header.setTimestamp(LocalDateTime.now().toString()); 
+//		                            apiResponse.setHeader(header);
+//		                            
+//		                            ApiResponse.Status status = new ApiResponse.Status();
+//		                            status.setCode(HttpStatus.OK.value());
+//		                            status.setDescription(HttpStatus.OK.getReasonPhrase());
+//		                            apiResponse.setStatus(status);
+//		                            
+//		                            apiResponse.setContent(response);
+//		                            
+//		                            return Mono.just(apiResponse);
+//								});
+//					}else {
+//						return healthCheckService.getErrorMessage(String.class);
+//					}
+//				});
 //    }
 }

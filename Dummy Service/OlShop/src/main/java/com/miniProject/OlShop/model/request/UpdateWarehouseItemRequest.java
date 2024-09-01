@@ -12,8 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UpdateWarehouseItemRequest  {
 
-  private String id;
-  
   private String version;
   
   private Integer qty;

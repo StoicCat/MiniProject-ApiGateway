@@ -48,7 +48,7 @@ public class WarehouseItemServiceImpl implements WarehouseItemService {
   @Override
   public void edit(UpdateWarehouseItemRequest request) {
 
-    getEntityById(request.getId()).ifPresentOrElse(entity -> {
+    getEntityBySupplierItemId(request.getSupplierItemId()).ifPresentOrElse(entity -> {
       entity.setQty(request.getQty());
       entity.setUpdatedAt(LocalDateTime.now());
     	entity.setUpdatedBy(principalService.getUserId());
@@ -88,6 +88,10 @@ public class WarehouseItemServiceImpl implements WarehouseItemService {
     return repository.findById(id);
   }
 
+  private Optional<WarehouseItem> getEntityBySupplierItemId(String supplierItemId) {
+    return repository.findBySupplierItemId(supplierItemId);
+  }
+  
   @Override
   public List<WarehouseItemResponse> getAll() {
     List<WarehouseItem> warehouseItems = repository.findAll();
