@@ -28,8 +28,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserController {
 
-	private final HealthCheckService healthCheckService;
-	private final WebClient.Builder webClientBuilder;
+    private final HealthCheckService healthCheckService;
+    private final WebClient.Builder webClientBuilder;
 
 	@PostMapping("/register")
 	public Mono<LoginResponseGateway> registerLogin(@RequestBody CreateUserRequestGateway request) {
