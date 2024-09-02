@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,13 +36,13 @@ public class ItemRequestDetailController {
         return new ResponseEntity<>("Add Success", HttpStatus.OK);
     }
 
-    @GetMapping("get-all-purchase-transaction-details-by-purchase-transaction-id/{purchaseTransactionId}")
+    @GetMapping("get-all-purchase-transaction-details-by-purchase-transaction-id/{itemRequestId}")
     @Operation(summary = "Get all item request details by request ID")
-    public ResponseEntity<List<ItemRequestDetailResponse>> get(@PathVariable String purchaseTransactionId) {
-        return new ResponseEntity<>(itemRequestDetailService.getAllByItemRequestId(purchaseTransactionId), HttpStatus.OK);
+    public ResponseEntity<List<ItemRequestDetailResponse>> get(@PathVariable String itemRequestId) {
+        return new ResponseEntity<>(itemRequestDetailService.getAllByItemRequestId(itemRequestId), HttpStatus.OK);
     }
 
-    @PostMapping("delete-item-by-id")
+    @DeleteMapping("delete-item-by-id")
     @Operation(summary = "Delete an item request detail by ID")
     public ResponseEntity<String> delete(@RequestParam String id) {
         itemRequestDetailService.delete(id);
