@@ -33,11 +33,13 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
 	@Transactional
 	@Override
-	public void add(CreateItemRequestRequest request) {
+	public String add(CreateItemRequestRequest request) {
 		ItemRequest entity = new ItemRequest();
 		entity.setAcceptanceStatus(AcceptanceStatus.PND.getCode());
 		userService.getEntityById(request.getUserSupplierId()).ifPresent(entity::setUserSupplier);
 		repository.saveAndFlush(entity);
+		
+		return entity.getId();
 	}
 
 	@Transactional

@@ -36,7 +36,7 @@ public class ItemRequestController {
                 if (isAvailable) {
                     return webClientBuilder.build()
                         .put()
-                        .uri(Environment.SERVICE_URL + "item-request/cc-item-request")
+                        .uri(Environment.SERVICE_URL + "item-request/acc-item-request")
                         .retrieve()
                         .bodyToMono(Map.class)
                         .flatMap(accItemRequestDetailResponse -> 
@@ -70,29 +70,30 @@ public class ItemRequestController {
                     CreateItemRequestRequest createItemRequest = new CreateItemRequestRequest();
                     createItemRequest.setUserSupplierId(request.getSupplierItemId());
 
-                    CreateItemRequestDetailRequest createItemRequestDetail = new CreateItemRequestDetailRequest();
-                    createItemRequestDetail.setItemRequestId(request.getItemRequestId());
-                    createItemRequestDetail.setQty(request.getQty());
-                    createItemRequestDetail.setSupplierItemId(request.getSupplierItemId());
-
                     return webClientBuilder.build()
                         .post()
                         .uri(Environment.SERVICE_URL + "item-request/add-item-request")
                         .bodyValue(createItemRequest)
                         .retrieve()
-                        .bodyToMono(String.class)
-                        .flatMap(createItemRequestResponse -> 
-                            webClientBuilder.build()
+                        .bodyToMono(String.class) 
+                        .flatMap(itemRequestId -> {
+                            CreateItemRequestDetailRequest createItemRequestDetail = new CreateItemRequestDetailRequest();
+                            createItemRequestDetail.setItemRequestId(itemRequestId);
+                            createItemRequestDetail.setQty(request.getQty());
+                            createItemRequestDetail.setSupplierItemId(request.getSupplierItemId());
+
+                            return webClientBuilder.build()
                                 .post()
-                                .uri(Environment.SERVICE_URL + "item-request-detail/add-purchase-transaction-detail")
+                                .uri(Environment.SERVICE_URL + "item-request-detail/add-item-request-detail")
                                 .bodyValue(createItemRequestDetail)
                                 .retrieve()
-                                .bodyToMono(Map.class) // Replace with appropriate model if available
-                                .map(response -> ResponseEntity.ok(response))
-                        );
+                                .bodyToMono(Map.class)
+                                .map(response -> ResponseEntity.ok(response));
+                        });
                 } else {
                     return Mono.just(ResponseEntity.status(503).body("Backend service is unavailable"));
                 }
             });
     }
+
 }

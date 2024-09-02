@@ -8,7 +8,6 @@ import lombok.Setter;
 public class CreateRequestItemRequestGateway {
 	
 	private String userSupplierId;
-	private String itemRequestId;
 	private String supplierItemId;
 	private Integer qty;
 
