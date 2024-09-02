@@ -9,7 +9,7 @@ import com.miniProject.OlShop.model.response.ItemRequestResponse;
 
 public interface ItemRequestService {
   
-  void add(CreateItemRequestRequest request);
+  String add(CreateItemRequestRequest request);
 
   void acc(UpdateItemRequestRequest request);
   

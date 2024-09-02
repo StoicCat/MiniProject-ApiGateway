@@ -32,8 +32,8 @@ public class ItemRequestController {
     @PostMapping("add-item-request")
     @Operation(summary = "Add a new item request")
     public ResponseEntity<String> add(@RequestBody CreateItemRequestRequest request) {
-        itemRequestService.add(request);
-        return new ResponseEntity<>("Add Success", HttpStatus.OK);
+        String entityId = itemRequestService.add(request);
+        return new ResponseEntity<>(entityId, HttpStatus.OK);
     }
 
     @PutMapping("acc-item-request")

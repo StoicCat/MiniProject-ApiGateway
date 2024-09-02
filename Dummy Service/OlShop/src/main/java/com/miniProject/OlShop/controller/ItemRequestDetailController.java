@@ -29,14 +29,14 @@ import lombok.RequiredArgsConstructor;
 public class ItemRequestDetailController {
     private final ItemRequestDetailService itemRequestDetailService;
 
-    @PostMapping("add-purchase-transaction-detail")
+    @PostMapping("add-item-request-detail")
     @Operation(summary = "Add a new item request detail")
     public ResponseEntity<String> add(@RequestBody CreateItemRequestDetailRequest request) {
         itemRequestDetailService.add(request);
         return new ResponseEntity<>("Add Success", HttpStatus.OK);
     }
 
-    @GetMapping("get-all-purchase-transaction-details-by-purchase-transaction-id/{itemRequestId}")
+    @GetMapping("get-all-item-request-by-item-request-id/{itemRequestId}")
     @Operation(summary = "Get all item request details by request ID")
     public ResponseEntity<List<ItemRequestDetailResponse>> get(@PathVariable String itemRequestId) {
         return new ResponseEntity<>(itemRequestDetailService.getAllByItemRequestId(itemRequestId), HttpStatus.OK);
