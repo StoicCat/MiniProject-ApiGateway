@@ -1,5 +1,6 @@
 package com.miniProject.OlShop.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.miniProject.OlShop.constant.AcceptanceStatus;
 import com.miniProject.OlShop.entity.ItemRequest;
+import com.miniProject.OlShop.entity.User;
+import com.miniProject.OlShop.helper.CodeGenerationHelper;
 import com.miniProject.OlShop.model.request.CreateItemRequestRequest;
 import com.miniProject.OlShop.model.request.UpdateItemRequestRequest;
 import com.miniProject.OlShop.model.response.ItemRequestResponse;
@@ -35,7 +38,23 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 	@Override
 	public String add(CreateItemRequestRequest request) {
 		ItemRequest entity = new ItemRequest();
+		entity.setCreatedBy(principalService.getUserId());
 		entity.setAcceptanceStatus(AcceptanceStatus.PND.getCode());
+		
+		final var code = CodeGenerationHelper.generateCode();
+		
+		entity.setTransactionCode(code);
+		entity.setTransactionDate(LocalDateTime.now());
+		
+		System.out.println("aaaaaaaaaaa");
+		System.out.println(request.getUserSupplierId());
+		
+		
+		User user = userService.getEntityById(request.getUserSupplierId()).orElse(null);
+		
+		System.out.println(user.getAddress());
+		
+		entity.setUserSupplier(user);
 		userService.getEntityById(request.getUserSupplierId()).ifPresent(entity::setUserSupplier);
 		repository.saveAndFlush(entity);
 		

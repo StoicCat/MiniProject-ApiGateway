@@ -36,6 +36,7 @@ public class ItemRequestDetailServiceImpl implements ItemRequestDetailService {
 	@Override
 	public void add(CreateItemRequestDetailRequest request) {
 		ItemRequestDetail entity = new ItemRequestDetail();
+		entity.setCreatedBy(principalService.getUserId());
 		entity.setQty(request.getQty());
 		itemRequestService.getEntityById(request.getItemRequestId()).ifPresent(entity::setItemRequest);
 		supplierItemService.getEntityById(request.getSupplierItemId()).ifPresent(entity::setSupplierItem);
