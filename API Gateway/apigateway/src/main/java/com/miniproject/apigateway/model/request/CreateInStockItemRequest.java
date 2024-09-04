@@ -6,6 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateInStockItemRequest {
+	private Integer qty;
 	private String supplierItemId;
-	private Integer quantity;
+	private Integer warehouseItemQty;
+	private Integer warehouseItemVersion;
+	
 }

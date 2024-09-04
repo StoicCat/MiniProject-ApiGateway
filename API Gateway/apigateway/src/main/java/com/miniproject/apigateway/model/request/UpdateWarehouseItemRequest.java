@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class UpdateWarehouseItemRequest {
 
-	  private String version;
+	  private Integer version;
 	  
 	  private Integer qty;
 	  

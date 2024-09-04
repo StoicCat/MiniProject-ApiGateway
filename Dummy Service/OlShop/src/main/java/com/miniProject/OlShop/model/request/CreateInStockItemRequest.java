@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateInStockItemRequest {
 	private String supplierItemId;
-	private Integer quantity;
+	private Integer qty;
 }

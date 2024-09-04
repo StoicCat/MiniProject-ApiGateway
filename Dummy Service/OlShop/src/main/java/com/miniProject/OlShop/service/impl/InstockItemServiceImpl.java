@@ -83,11 +83,7 @@ public class InstockItemServiceImpl implements InStockItemService {
         InStockItem entity = new InStockItem();
         
         entity.setCreatedBy(principalService.getUserId());
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
-        System.out.println(principalService.getUserId());
-        entity.setQty(request.getQuantity());
-        System.out.println(request.getQuantity());
-        System.out.println(request.getSupplierItemId());
+        entity.setQty(request.getQty());
         entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
 
         return entity;
@@ -96,7 +92,7 @@ public class InstockItemServiceImpl implements InStockItemService {
     private InStockItem mapToEntity(InStockItem entity, UpdateInStockItemRequest request) {
         entity.setVer(request.getVersion());
         entity.setUpdatedBy(principalService.getUserId());
-        entity.setQty(request.getQuantity());
+        entity.setQty(request.getQty());
         entity.setSupplierItem(supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null));
 
         return entity;
