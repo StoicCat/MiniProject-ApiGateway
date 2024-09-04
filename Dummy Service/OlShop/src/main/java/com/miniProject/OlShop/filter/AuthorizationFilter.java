@@ -62,10 +62,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		// Exclude Swagger endpoints from JWT filtering
-//		return matchers.stream().anyMatch(m -> m.matches(request)) || request.getRequestURI().startsWith("/swagger-ui/")
-//				|| request.getRequestURI().startsWith("/v3/api-docs/");
-		return true;
+
+		
+		return matchers.stream().anyMatch(m -> m.matches(request)) || request.getRequestURI().startsWith("/swagger-ui/")
+				|| request.getRequestURI().startsWith("/v3/api-docs/");
 	}
 
 }

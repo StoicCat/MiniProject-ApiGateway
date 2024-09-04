@@ -27,12 +27,12 @@ public class SecurityConfig {
 	}
 
 	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults())
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authz -> authz
-                .anyRequest().permitAll()  // Allow all requests without authentication
-            );
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthorizationFilter authorizationFilter) throws Exception {
+		
+		http.cors(Customizer.withDefaults());
+		http.csrf(csrf -> csrf.disable());
+		
+		http.addFilterAt(authorizationFilter, BasicAuthenticationFilter.class);
 
         return http.build();
     }
@@ -43,10 +43,9 @@ public class SecurityConfig {
 		final List<RequestMatcher> matchers = new ArrayList<>();
 		matchers.add(new AntPathRequestMatcher("/users/**", HttpMethod.POST.name()));
 		matchers.add(new AntPathRequestMatcher("/users/add", HttpMethod.POST.name()));
-		matchers.add(new AntPathRequestMatcher("/*", HttpMethod.GET.name()));
 		matchers.add(new AntPathRequestMatcher("/actuator/health"));
 		matchers.add(new AntPathRequestMatcher("/swagger-ui/**"));
-		matchers.add(new AntPathRequestMatcher("**/v3/api-docs/**"));
+		matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
 
 		return matchers; 
 	}
