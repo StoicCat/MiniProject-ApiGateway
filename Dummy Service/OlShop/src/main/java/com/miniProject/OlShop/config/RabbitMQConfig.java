@@ -1,31 +1,40 @@
 package com.miniProject.OlShop.config;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 @Configuration
 public class RabbitMQConfig {
 
-    // Nama Exchange dan Queue
     public static final String EXCHANGE_INVENTORY = "purchase_exchange";
-    public static final String QUEUE_INVENTORY= "inventory_queue";
     public static final String ROUTING_INVENTORY = "inventory_routing_key";
 
-    // Deklarasi Exchange (Direct Exchange)
+
     @Bean
     public DirectExchange directExchange() {
         return new DirectExchange(EXCHANGE_INVENTORY);
     }
 
-    // Deklarasi Queue
+    // Menggunakan Jackson untuk konversi JSON
     @Bean
-    public Queue purchaseQueue() {
-        return new Queue(QUEUE_INVENTORY, true);  // true untuk membuat queue durable
+    public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
 
-    // Binding antara Queue dan Exchange dengan Routing Key
+    // Konfigurasi RabbitTemplate untuk menggunakan Jackson2JsonMessageConverter
     @Bean
-    public Binding binding(Queue purchaseQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(purchaseQueue).to(directExchange).with(ROUTING_INVENTORY);
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(jackson2JsonMessageConverter());
+        return template;
     }
+    
+    
+    
+    
 }
+
