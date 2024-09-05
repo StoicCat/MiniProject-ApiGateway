@@ -24,4 +24,7 @@ public class PurchaseTransaction extends BaseModel {
 
 	@Column(name = "transaction_code", nullable = false, unique = true)
 	private String transactionCode;
+	
+	@Column(name = "status", nullable = false)
+	private String status;
 }
