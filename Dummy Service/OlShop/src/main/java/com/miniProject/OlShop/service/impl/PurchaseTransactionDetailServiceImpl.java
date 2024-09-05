@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.miniProject.OlShop.config.RabbitMQConfig;
 import com.miniProject.OlShop.entity.PurchaseTransactionDetail;
 import com.miniProject.OlShop.entity.SupplierItem;
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionDetailRequest;
@@ -16,7 +17,7 @@ import com.miniProject.OlShop.service.PrincipalService;
 import com.miniProject.OlShop.service.PurchaseTransactionDetailService;
 import com.miniProject.OlShop.service.PurchaseTransactionService;
 import com.miniProject.OlShop.service.SupplierItemService;
-
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,7 @@ import lombok.Setter;
 public class PurchaseTransactionDetailServiceImpl implements PurchaseTransactionDetailService {
 	private final PrincipalService principalService;
 	private final SupplierItemService supplierItemService;
+	 private final RabbitTemplate rabbitTemplate;
 	@Setter(onMethod_ = @Autowired, onParam_ = @Lazy)
 	private PurchaseTransactionService purchaseTransactionService;
 	private final PurchaseTransactionDetailRepository repository;
@@ -33,8 +35,12 @@ public class PurchaseTransactionDetailServiceImpl implements PurchaseTransaction
 	@Override
 	@Transactional
 	public void add(CreatePurchaseTransactionDetailRequest request) {
-		PurchaseTransactionDetail entity = mapToEntity(request);
-		repository.saveAndFlush(entity);
+		request.setCreateBy(principalService.getUserId());
+		
+		   rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_INVENTORY, 
+                   RabbitMQConfig.ROUTING_INVENTORY, 
+                   request);
+System.out.println("Pesan dikirim ke RabbitMQ: " + request);
 	}
 
 	@Override
