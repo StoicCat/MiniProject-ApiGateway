@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionDetailRequest;
+import com.miniProject.OlShop.model.response.CreatePurchaseTransactionDetailRequestList;
 import com.miniProject.OlShop.model.response.PurchaseTransactionDetailResponse;
 import com.miniProject.OlShop.service.PurchaseTransactionDetailService;
 
@@ -28,7 +29,7 @@ public class PurchaseTransactionDetailController {
 	
 	@PostMapping("add-purchase-transaction-detail")
 	@Operation(summary = "Add a new purchase transaction detail")
-    public ResponseEntity<String> add(@RequestBody CreatePurchaseTransactionDetailRequest request) {
+    public ResponseEntity<String> add(@RequestBody CreatePurchaseTransactionDetailRequestList request) {
 		purchaseTransactionDetailService.add(request);
         return new ResponseEntity<>("Add Success", HttpStatus.CREATED);
     }

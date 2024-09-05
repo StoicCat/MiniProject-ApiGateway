@@ -30,8 +30,8 @@ public class PurchaseTransactionController {
 	@PostMapping("createNewPurchaseTransaction")
 	@Operation(summary = "Create a new purchase transaction")
 	public ResponseEntity<String> createPurchaseTransaction(@RequestBody CreatePurchaseTransactionRequest request) {
-		service.add(request);
-		return new ResponseEntity<>("Purchase transaction created successfully", HttpStatus.CREATED);
+		var response = service.add(request);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("getPurchaseTransactionById/{id}")

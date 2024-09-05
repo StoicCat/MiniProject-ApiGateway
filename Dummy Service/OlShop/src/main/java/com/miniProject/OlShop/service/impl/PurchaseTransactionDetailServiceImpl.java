@@ -11,6 +11,7 @@ import com.miniProject.OlShop.config.RabbitMQConfig;
 import com.miniProject.OlShop.entity.PurchaseTransactionDetail;
 import com.miniProject.OlShop.entity.SupplierItem;
 import com.miniProject.OlShop.model.request.CreatePurchaseTransactionDetailRequest;
+import com.miniProject.OlShop.model.response.CreatePurchaseTransactionDetailRequestList;
 import com.miniProject.OlShop.model.response.PurchaseTransactionDetailResponse;
 import com.miniProject.OlShop.repository.PurchaseTransactionDetailRepository;
 import com.miniProject.OlShop.service.PrincipalService;
@@ -64,7 +65,7 @@ System.out.println("Pesan dikirim ke RabbitMQ: " + request);
 		return response;
 	}
 
-	private PurchaseTransactionDetail mapToEntity(CreatePurchaseTransactionDetailRequest request) {
+	private PurchaseTransactionDetail mapToEntity(CreatePurchaseTransactionDetailRequestList request) {
 		PurchaseTransactionDetail entity = new PurchaseTransactionDetail();
 
 		SupplierItem suplierItem = supplierItemService.getEntityById(request.getSupplierItemId()).orElse(null);

@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePurchaseTransactionDetailRequest {
-	private String purchaseTransactionId;
+
 	private String supplierItemId;
 	private Integer quantity;
 	private String createBy;

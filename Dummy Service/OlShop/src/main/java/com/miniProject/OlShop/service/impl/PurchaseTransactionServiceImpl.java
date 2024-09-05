@@ -33,9 +33,11 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
 
 	@Override
 	@Transactional
-	public void add(CreatePurchaseTransactionRequest request) {
+	public String add(CreatePurchaseTransactionRequest request) {
 		PurchaseTransaction entity = mapToEntity(request);
 		repository.saveAndFlush(entity);
+		
+		return entity.getId();
 	}
 
 	@Override

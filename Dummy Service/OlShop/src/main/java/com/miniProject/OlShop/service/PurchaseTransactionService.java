@@ -9,7 +9,7 @@ import com.miniProject.OlShop.model.request.UpdatePurchaseTransactionRequest;
 import com.miniProject.OlShop.model.response.PurchaseTransactionResponse;
 
 public interface PurchaseTransactionService {
-	void add(CreatePurchaseTransactionRequest request);
+	String add(CreatePurchaseTransactionRequest request);
 	void edit(UpdatePurchaseTransactionRequest request);
 	void delete(String id);
 	PurchaseTransactionResponse getById(String id);
